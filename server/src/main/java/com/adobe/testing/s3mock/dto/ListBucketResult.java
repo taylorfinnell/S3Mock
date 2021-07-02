@@ -60,7 +60,8 @@ public class ListBucketResult implements Serializable {
   private List<BucketContents> contents;
 
   @JsonProperty("CommonPrefixes")
-  private CommonPrefixes commonPrefixes;
+  @JacksonXmlElementWrapper(useWrapping = false)
+  private List<CommonPrefixes> commonPrefixes;
 
   /**
    * Constructs a new {@link ListBucketResult}.
@@ -101,7 +102,14 @@ public class ListBucketResult implements Serializable {
     this.contents = new ArrayList<>();
     this.contents.addAll(contents);
     this.commonPrefixes = commonPrefixes == null || commonPrefixes.isEmpty() ? null :
-        new CommonPrefixes(commonPrefixes);
+        new ArrayList();
+
+    if (this.commonPrefixes != null) {
+      for (String commonPrefix : commonPrefixes) {
+        this.commonPrefixes.add(new CommonPrefixes(commonPrefix));
+      }
+    }
+
   }
 
   @XmlElement(name = "Name")
@@ -147,7 +155,7 @@ public class ListBucketResult implements Serializable {
     this.contents = contents;
   }
 
-  public CommonPrefixes getCommonPrefixes() {
+  public List<CommonPrefixes> getCommonPrefixes() {
     return commonPrefixes;
   }
 }

@@ -26,9 +26,9 @@ class CommonPrefixes {
 
   @JsonProperty("Prefix")
   @JacksonXmlElementWrapper(useWrapping = false)
-  private final Collection<String> commonPrefixes;
+  private final String prefix;
 
-  public CommonPrefixes(final Collection<String> commonPrefixes) {
-    this.commonPrefixes = commonPrefixes;
+  public CommonPrefixes(final String prefix) {
+    this.prefix = prefix;
   }
 }

@@ -51,7 +51,8 @@ public class ListBucketResultV2 implements Serializable {
   private List<BucketContents> contents;
 
   @JsonProperty("CommonPrefixes")
-  private CommonPrefixes commonPrefixes;
+  @JacksonXmlElementWrapper(useWrapping = false)
+  private List<CommonPrefixes> commonPrefixes;
 
   @JsonProperty("ContinuationToken")
   private String continuationToken;
@@ -102,12 +103,19 @@ public class ListBucketResultV2 implements Serializable {
     this.contents = new ArrayList<>();
     this.contents.addAll(contents);
     this.commonPrefixes = commonPrefixes == null || commonPrefixes.isEmpty() ? null :
-        new CommonPrefixes(commonPrefixes);
+        new ArrayList();
     this.continuationToken = continuationToken;
     this.keyCount = keyCount;
     this.nextContinuationToken = nextContinuationToken;
     this.startAfter = startAfter;
     this.encodingType = encodingType;
+
+    if (this.commonPrefixes != null) {
+      for (String commonPrefix : commonPrefixes) {
+        this.commonPrefixes.add(new CommonPrefixes(commonPrefix));
+      }
+    }
+
   }
 
   @XmlElement(name = "Name")
@@ -133,7 +141,7 @@ public class ListBucketResultV2 implements Serializable {
     this.contents = contents;
   }
 
-  public CommonPrefixes getCommonPrefixes() {
+  public List<CommonPrefixes> getCommonPrefixes() {
     return commonPrefixes;
   }
 
